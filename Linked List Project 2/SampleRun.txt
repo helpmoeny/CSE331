@@ -1,0 +1,32 @@
+#Sample run for hotpotato after finishing main.cpp and RevList.h 
+Run 1:
+<117 black:~/Project2 >./hotpotato 4 1
+Final Order: 1 0 2 3 
+
+Run 2:
+<118 black:~/Project2 >./hotpotato 5 2
+Final Order: 2 0 3 4 1 
+
+Run 3:
+<119 black:~/Project2 >./hotpotato 6 3
+Final Order: 3 0 4 5 1 2 
+
+Run 4:
+<120 black:~/Project2 >./hotpotato 7 2
+Final Order: 2 0 3 6 4 5 1 
+
+Run 5:
+<121 black:~/Project2 >./hotpotato 2 1
+Final Order: 1 0
+           
+Run 6: 
+<122 black:~/Project2 >./hotpotato 12 3
+Final Order: 3 0 4 11 5 10 6 9 7 8 1 2 
+
+Run 7:
+<123 black:~/Project2 >./hotpotato 8 7
+Final Order: 7 0 1 5 3 2 4 6 
+
+Run 8:
+<124 black:~/Project2 >./hotpotato 9 9
+Final Order: 0 8 2 6 4 3 1 7 5 

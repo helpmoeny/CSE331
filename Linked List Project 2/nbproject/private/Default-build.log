@@ -1,0 +1,4 @@
+g++ -std=c++11 -g -O3 -c main.cpp
+C:/cygwin64/lib/gcc/x86_64-pc-cygwin/4.9.3/cc1plus.exe: error while loading shared libraries: cygisl-10.dll: cannot open shared object file: No such file or directory
+Makefile:7: recipe for target 'main.o' failed
+make: *** [main.o] Error 1
