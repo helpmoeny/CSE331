@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char* argv[]){
 
   if(argc != 3){
-    cerr << "Incorrect nubmer of command line arguments." << endl;
+    cerr << "Incorrect number of command line arguments." << endl;
     cerr << "\t[Prompt] <hotpotato> <number of players> <number of passes - or random number seed if negative>" << endl;
   }
 
@@ -21,10 +21,10 @@ int main(int argc, char* argv[]){
   //random number generator - borrowed from Avida - written by CA OFRIA and modified by J STEDWICK - based on RNG from Numerical Recipes in C: The Art of Scientific Computing (Flannery et al.)
   RandomNumberGenerator rng;
 
-  //are we using a random nubmer for m? if so seed with the absolute value of m
+  //are we using a random number for m? if so seed with the absolute value of m
   if(i_m < 0) rng.ResetSeed(i_m * -1); 
 
-  //reversable linked list that will hold the players
+  //reversible linked list that will hold the players
   CRevList<unsigned> ll_players;
 
   //set up the players
@@ -43,15 +43,25 @@ int main(int argc, char* argv[]){
   //play the game
   while(!ll_players.IsEmpty()){
     if(i_m < 0) u_steps = rng.GetUInt(1,i_n+1);
-
+        
+    for (unsigned step = 0; step < u_steps; step++)
+    {
+        curr = ll_players.Next(curr); 
+    }
+    
+    old = curr;
+    ll_players.Delete(curr);
+    
+    v_order.push_back(old->Data());
   }
 
 
-  //ouptut the order
+  //output the order
   cout << "Final Order: ";
   for(unsigned i = 0; i < i_n; i++){
     cout << v_order.at(i) << " ";
   }
+  
   cout << endl;
 
 }
