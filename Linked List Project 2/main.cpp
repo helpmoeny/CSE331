@@ -43,7 +43,13 @@ int main(int argc, char* argv[]){
   //play the game
   while(!ll_players.IsEmpty()){
     if(i_m < 0) u_steps = rng.GetUInt(1,i_n+1);
-
+	old = *curr;
+	for(unsigned i=0; i<u_steps; i++){
+		curr = ll.players.Next(curr);
+	}
+	v_order.pushback(old.Data());
+	Delete(curr);
+	
   }
 
 
