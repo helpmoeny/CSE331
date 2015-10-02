@@ -124,7 +124,7 @@ public:
   // Determines if the list is empty
   bool IsEmpty() const
   {
-      if (m_head == NULL || m_tail == NULL)
+      if (m_head == NULL && m_tail == NULL)	//||?
       {
           return true;
       }
@@ -162,20 +162,34 @@ public:
   
   void PushBack(const T &t)
   {
-      Node *node = new Node(t);
-      if(IsEmpty());
+      /* Node *node = new Node(t);
+      if(IsEmpty())
 	  {
 		  m_head.m_next = node;
 		  node -> m_next = m_head.m_next;
 		  node -> m_prev = m_head.m_next;
 	  }
-	  else{
+	  else if(!IsEmpty){
 		  Begin()-> p_prev-> m_next = node;
 		  node -> m_prev = End();
 		  node -> m_next = Begin();
 		  Begin() -> m_prev = node;
 	  }
-	  m_size++;
+	  m_size++; */
+	  
+	  Node *node = new Node(t);
+      if(IsEmpty())
+	  {
+		  m_head -> m_next = node;
+		  node -> m_next = m_head -> m_next;
+		  node -> m_prev = m_head -> m_next;
+	  }
+	  else if(!IsEmpty()){
+		  Begin()-> m_prev-> m_next = node;
+		  node -> m_prev = End();
+		  node -> m_next = Begin();
+		  Begin() -> m_prev = node;
+	  }
 	  
       /* if (m_first == false)
       {
@@ -200,7 +214,7 @@ public:
   {
      Node *second = Next(Begin());
 	 Delete(Begin());
-	 m_head.m_next = second;
+	 m_head -> m_next = second;	//m_head.m_next = second;
   }
   
   void PopBack()
@@ -219,7 +233,7 @@ public:
   //get a pointer to node next in the list
   const Node *Next(const Node *n) const
   {
-      if (!reverse!reversed)
+      if (!IsReversed())	//!reverse!reversed
       {
           return n->m_next;
       }
