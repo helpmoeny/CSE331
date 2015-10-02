@@ -33,7 +33,7 @@ int main(int argc, char* argv[]){
   }
 
   //set up the game
-  unsigned u_steps = i_m;
+  /* unsigned u_steps = i_m;
 
   CRevList<unsigned>::Node *curr = ll_players.Begin();
   CRevList<unsigned>::Node *old = NULL;
@@ -48,18 +48,19 @@ int main(int argc, char* argv[]){
     {
         curr = ll_players.Next(curr); 
     }
-    
-    old = curr;
-    ll_players.Delete(curr);
-    
+	old = ll_players.Next(curr);
     v_order.push_back(old->Data());
-  }
+    ll_players.Delete(curr);
+	old = curr;
+    ll_players.Reverse();
+    
+  } */
 
 
   //output the order
   cout << "Final Order: ";
   for(unsigned i = 0; i < i_n; i++){
-    cout << v_order.at(i) << " ";
+    /* cout << v_order.at(i) << " "; */
   }
   
   cout << endl;
