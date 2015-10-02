@@ -33,7 +33,7 @@ int main(int argc, char* argv[]){
   }
 
   //set up the game
-  /* unsigned u_steps = i_m;
+  unsigned u_steps = i_m;
 
   CRevList<unsigned>::Node *curr = ll_players.Begin();
   CRevList<unsigned>::Node *old = NULL;
@@ -42,27 +42,31 @@ int main(int argc, char* argv[]){
 
   //play the game
   while(!ll_players.IsEmpty()){
+    //i_m = number of passes, i_n = number of players
     if(i_m < 0) u_steps = rng.GetUInt(1,i_n+1);
-        
-    for (unsigned step = 0; step < u_steps; step++)
-    {
-        curr = ll_players.Next(curr); 
-    }
-	old = ll_players.Next(curr);
-    v_order.push_back(old->Data());
-    ll_players.Delete(curr);
-	old = curr;
-    ll_players.Reverse();
     
-  } */
-
+    //cout << "Current Length is: " << ll_players.Length() << endl;
+    for(int i = 0; i < u_steps; i++){
+      old = curr;
+      curr = ll_players.Next(curr);
+    }
+	
+    v_order.push_back(curr->Data());
+    //cout << "curr being pushed back is: " << curr->Data() << endl;
+    ll_players.Delete(curr);
+    
+    if(!ll_players.IsEmpty()){
+      curr = ll_players.Next(old);
+      //cout << "old:" << old->Data() << endl;
+      ll_players.Reverse();
+    }
+  }
+  //cout << "broke while" << endl;
 
   //output the order
-  cout << "Final Order: ";
+  //cout << "Final Order: ";
   for(unsigned i = 0; i < i_n; i++){
-    /* cout << v_order.at(i) << " "; */
+    cout << v_order.at(i) << " ";
   }
-  
   cout << endl;
-
 }

@@ -15,8 +15,10 @@ public:
   // Constructor.  Sets to an empty list.
   CRevList() 
   {
-      m_head = NULL;
-      m_tail = NULL;
+	  m_head = new Node();
+  	  m_head->m_next = m_head;
+	  m_head->m_prev = m_head; 
+      int length = 0;
       reversed = false;
   }
 
@@ -124,12 +126,13 @@ public:
   // Determines if the list is empty
   bool IsEmpty() const
   {
-      if (m_head == NULL && m_tail == NULL)	//||?
-      {
+      /* if (m_head == NULL && m_tail == NULL){	//||?
           return true;
       }
-      
-      return false;
+      return false; */
+	  
+	  //returns a true if length is zero
+   	 return (length == 0);
   }
 
   //methods to add data to the front or the back of the list
@@ -162,52 +165,22 @@ public:
   
   void PushBack(const T &t)
   {
-      /* Node *node = new Node(t);
-      if(IsEmpty())
-	  {
-		  m_head.m_next = node;
-		  node -> m_next = m_head.m_next;
-		  node -> m_prev = m_head.m_next;
-	  }
-	  else if(!IsEmpty){
-		  Begin()-> p_prev-> m_next = node;
-		  node -> m_prev = End();
-		  node -> m_next = Begin();
-		  Begin() -> m_prev = node;
-	  }
-	  m_size++; */
-	  
-	  Node *node = new Node(t);
-      if(IsEmpty())
-	  {
-		  m_head -> m_next = node;
-		  node -> m_next = m_head -> m_next;
-		  node -> m_prev = m_head -> m_next;
-	  }
-	  else if(!IsEmpty()){
-		  Begin()-> m_prev-> m_next = node;
-		  node -> m_prev = End();
-		  node -> m_next = Begin();
-		  Begin() -> m_prev = node;
-	  }
-	  
-      /* if (m_first == false)
-      {
-		  n = new Node(t);
-		  //n ->m_payload = t;
-		  n ->m_next = n;
-		  n ->m_prev = n;
-		  n -> m_next = m_head;
-          m_head = n;
-          m_tail = n;
-		  m_first = true;
-		  return;
-      }
-		  n = new Node();
-		  n -> m_prev = m_tail;
-		  m_tail -> m_next = n;
-		  m_tail = n; */
-
+	 Node *Back = new Node(t);
+	 if (!IsEmpty())
+	 {
+	  End() -> m_next = Back;
+	  Back -> m_prev = End();
+	  Back -> m_next = m_head;
+	  m_head -> m_prev = Back;
+	 }
+	 else
+	 {
+	  Back -> m_next = m_head;
+	  Back -> m_prev = m_head;
+	  m_head -> m_next = Back;
+	  m_head -> m_prev = Back;
+	 }
+	 length++;
   }
   
   void PopFront()
@@ -223,37 +196,41 @@ public:
   }
 
   //Get a pointer to the first node in the list
-  const Node *Begin() const{return m_head;}	//return m_head.m_next;
-  Node *Begin(){return m_head;}				//same...
+  const Node *Begin() const{return m_head -> m_next;}	
+  Node *Begin(){return m_head -> m_next;}				
 
   //get a pointer to the last node in the list
-  const Node *End() const{return m_tail;}	//return m_head.m_next->m_prev;
-  Node *End(){return m_tail;}
+  const Node *End() const{return m_head -> m_prev;}	
+  Node *End(){return m_head -> m_prev;}
 
   //get a pointer to node next in the list
   const Node *Next(const Node *n) const
   {
-      if (!IsReversed())	//!reverse!reversed
-      {
-          return n->m_next;
+      if (IsReversed()){ //forward
+		  if( n -> m_next == m_head ){
+			  return m_head -> m_next;
+			  }
+		  else{
+			  return n -> m_next;
+		  }
       }
-
-      else
-      {
-          return n->m_prev;
+      else{ //backwards
+		  if( n->m_prev == m_head){
+			  return m_head->m_prev;
+		  }
+		  else{
+			  return n->m_prev;
+		  }
       }
-      
   }
   
   Node *Next(const Node *n)
   {
-      if (!reversed)
-      {
+      if (reversed){
           return n->m_next; //Don't know if we need the Return in front of these
       }
 
-      else
-      {
+      else{
           return n->m_prev; //Don't know if we need the Return in front of these
       }
   }
@@ -263,20 +240,15 @@ public:
   {
       Node *itr = m_head;
       
-      while (itr != NULL)
-      {
-          if (t == itr->m_payload)
-          {
+      while (itr != NULL){
+          if (t == itr->m_payload){
               return itr;
           }
           
-          if (!reversed)
-          {
+          if (!reversed){
               itr = itr->m_next;
           }
-          
-          else
-          {
+          else{
               itr = itr->m_prev;
           }
       }
@@ -289,20 +261,14 @@ public:
       
       Node *itr = m_head;
       
-      while (itr != NULL)
-      {
-          if (t == itr->m_payload)
-          {
+      while (itr != NULL){
+          if (t == itr->m_payload){
               return itr;
           }
-          
-          if (!reversed)
-          {
+          if (!reversed){
               itr = itr->m_next;
           }
-          
-          else
-          {
+          else{
               itr = itr->m_prev;
           }
       }
