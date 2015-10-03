@@ -6,7 +6,8 @@
 #ifndef REVLIST_H
 #define REVLIST_H
 
-//#include <iostream>
+#include <iostream>
+#include <iomanip>
 
 template<class T> class CRevList
 {
@@ -18,55 +19,26 @@ public:
 	  m_head = new Node();
   	  m_head->m_next = m_head;
 	  m_head->m_prev = m_head; 
-      int length = 0;
+      m_size = 0;
       reversed = false;
   }
 
-  // Destructor.  Deletes everything in the list.
+  // Destructor.  Deletes everything in the list. NOT USED
   ~CRevList()
   {
-      Node *itr = m_head;
-      
-      while (itr != NULL)
-      {
-          Node *temp = itr;
-          
-          if (!reversed)
-          {
-              itr = itr->m_next;
-          }
-          
-          else
-          {
-              itr = itr->m_prev;
-          }
-          
-          delete temp;
-      }
-      
-      m_head = NULL;
-      m_tail = NULL;
+	 Clear();
+	 delete m_head;
   }
 
   // Copy constructor.  Copies another list.
   CRevList(const CRevList &b)
   {
-      Node *itr = b->m_head;
-      
-      while (itr != NULL)
-      {
-          PushBack(itr->m_payload);
-          
-          if (!b.IsReversed())
-          {
-              itr = itr->m_next;
-          }
-          
-          else
-          {
-              itr = itr->m_prev;
-          }
-      }
+	reversed = true;
+	Node *Tmp = b.Begin();
+	for(int i = 0; i < b.length; i++){
+		PushBack(Tmp->m_payload);
+		Tmp = Next(Tmp); 
+	}
   }
 
   // Assignment operator.  Copies another list.
@@ -75,29 +47,14 @@ public:
   // Clear the list.
   void Clear()
   {
-      Node *itr = m_head;
-      
-      while (itr != NULL)
-      {
-          Node *temp = itr;
-          
-          if (!reversed)
-          {
-             itr = itr->m_next;
-          }
-          
-          else
-          {
-             itr = itr->m_prev;
-          }
-          
-          delete temp;
-      }
-      
-      m_head = NULL;
-      m_tail = NULL;
-      
-      
+	 Node *Tmp = m_head -> m_next;
+	 Node *Tmp2 = Tmp;
+	 for(int i = 0; i < m_size; i++){
+		 Tmp = Next(Tmp);
+		 Delete(Tmp2);
+		 Tmp2 = Tmp;
+		
+	 }
   }
 
 
@@ -126,16 +83,13 @@ public:
   // Determines if the list is empty
   bool IsEmpty() const
   {
-      /* if (m_head == NULL && m_tail == NULL){	//||?
-          return true;
-      }
-      return false; */
-	  
-	  //returns a true if length is zero
-   	 return (length == 0);
+	 if(m_size ==0){
+   	 return true;
+	 }
+	 return false;
   }
 
-  //methods to add data to the front or the back of the list
+  //methods to add data to the front or the back of the list ""DON'T USE""
   void PushFront(const T &t)
   {
       /* Node *new_node = new Node(t); //Pushback original
@@ -165,29 +119,28 @@ public:
   
   void PushBack(const T &t)
   {
-	 Node *Back = new Node(t);
-	 if (!IsEmpty())
+	 Node *m_tail = new Node(t);
+	 if (!IsEmpty())	//If not empty
 	 {
-	  End() -> m_next = Back;
-	  Back -> m_prev = End();
-	  Back -> m_next = m_head;
-	  m_head -> m_prev = Back;
+	  End() -> m_next = m_tail;
+	  m_tail -> m_prev = End();
+	  m_tail -> m_next = m_head;
+	  m_head -> m_prev = m_tail;
 	 }
-	 else
-	 {
-	  Back -> m_next = m_head;
-	  Back -> m_prev = m_head;
-	  m_head -> m_next = Back;
-	  m_head -> m_prev = Back;
+	 else{	//If it is empty
+	  m_tail -> m_next = m_head;
+	  m_tail -> m_prev = m_head;
+	  m_head -> m_next = m_tail;
+	  m_head -> m_prev = m_tail;
 	 }
-	 length++;
+	 m_size++;
   }
   
   void PopFront()
   {
      Node *second = Next(Begin());
 	 Delete(Begin());
-	 m_head -> m_next = second;	//m_head.m_next = second;
+	 m_head -> m_next = second;
   }
   
   void PopBack()
@@ -206,7 +159,27 @@ public:
   //get a pointer to node next in the list
   const Node *Next(const Node *n) const
   {
-      if (IsReversed()){ //forward
+      if (!IsReversed()){ //forward
+		  if( n -> m_next == m_head ){
+			  return m_head -> m_next;
+			  }
+		  else{
+			  return n -> m_next;
+		  }
+      }
+      else{ //backwards
+		  if( n->m_prev == m_head){
+			  return m_head -> m_prev;
+		  }
+		  else{
+			  return n -> m_prev;
+		  }
+      }
+  }
+  
+  Node *Next(const Node *n)
+  {
+      if (!IsReversed()){ //forward
 		  if( n -> m_next == m_head ){
 			  return m_head -> m_next;
 			  }
@@ -223,70 +196,29 @@ public:
 		  }
       }
   }
-  
-  Node *Next(const Node *n)
-  {
-      if (reversed){
-          return n->m_next; //Don't know if we need the Return in front of these
-      }
-
-      else{
-          return n->m_prev; //Don't know if we need the Return in front of these
-      }
-  }
 
   //Find a node with the specified key
   const Node *Find(const T &t) const
   {
-      Node *itr = m_head;
-      
-      while (itr != NULL){
-          if (t == itr->m_payload){
-              return itr;
-          }
-          
-          if (!reversed){
-              itr = itr->m_next;
-          }
-          else{
-              itr = itr->m_prev;
-          }
-      }
-      
       return NULL;
   }
   
   Node *Find(const T &t)
   {
-      
-      Node *itr = m_head;
-      
-      while (itr != NULL){
-          if (t == itr->m_payload){
-              return itr;
-          }
-          if (!reversed){
-              itr = itr->m_next;
-          }
-          else{
-              itr = itr->m_prev;
-          }
-      }
-      
       return NULL;
   }
 
   //Delete the given node
   void Delete(Node *n)
   {
-	  if(n == nullptr){return;}
+	   if(n == nullptr){return;} //If node is null just return
 	  if(n == m_head){
 		if(n->m_next == n){
 			m_head = nullptr;
 			m_tail = nullptr;
 		}
 		else{
-			if(reversed){
+			if(IsReversed()){	//if reversed is true 
 				m_head = n->m_prev;
 			}
 			else{
@@ -300,7 +232,7 @@ public:
 			m_head = nullptr;
 		}
 		else{
-			if(reversed){
+			if(IsReversed()){
 				m_tail = n->m_next;
 			}
 			else{
@@ -308,43 +240,27 @@ public:
 			}
 		}
 	  }
-      n->m_prev->m_next = n->m_next;
-      n->m_next->m_prev = n->m_prev;
-	  
-      delete n;
+      n -> m_prev -> m_next = n -> m_next; //Swapping
+      n -> m_next -> m_prev = n -> m_prev;
+      delete n; 
+	  m_size--;
   }
 
   //Reverse the list in O(1) time
   void Reverse()
   {
-      /* Node *temp = m_head;
-      m_head = m_tail;
-      m_tail = temp;
-      reversed = !reversed; */
-	  Node *temp = m_head;
-	  Node *nextnode;
-	  Node *head = m_head;
-	  
-	  nextnode = head -> m_next;
-	  temp = head -> m_prev;
-	  head -> m_prev = head -> m_next;
-	  head -> m_next = temp;
-	  head = nextnode;
-	  
-	  while(head != m_head){
-		nextnode = head -> m_next;
-		temp = head -> m_prev;
-		head -> m_prev = head -> m_next;
-		head = nextnode;
-	  }
+    if(IsReversed()){
+		  reversed = false;
+	}
+	else{
+		reversed = true;
+	}
   }
   
   bool IsReversed()
   {
-      return reversed;
+    return reversed;
   }
-
-  
 
 private:
 
@@ -353,32 +269,19 @@ private:
 
   Node   *m_head;            // Front node
   Node   *m_tail;            // Back node
+  int    m_size;
   bool   reversed;           // Tracks current direction of list
-  bool	 m_first;
-  Node   *n;
 };
 
 // Assignment operator.  Copies another list.
 template<class T> void CRevList<T>::operator=(const CRevList<T> &b)
 {
-    Node *itr = b->m_head;
-      
-    while (itr != NULL)
-    {
+    Node *itr = b.Begin();
+    while (itr < b.length){
         PushBack(itr->m_payload);
-        
-        if (!b.IsReversed())
-        {
-            itr = itr->m_next;
-        }
-        
-        else
-        {
-            itr = itr->m_prev;
-        }
+        itr = Next(itr);
     }
 }
-
 
 
 //template<class T> (CRevList<T>::Node *) CRevList<T>::Begin1() {return m_reverse ? m_head.m_prev : m_head.m_next;}
