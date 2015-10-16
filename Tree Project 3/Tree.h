@@ -53,50 +53,51 @@ public:
       {
 		m_root = Ins;
       }
-      if (Find(t) != NULL){ Curr = NULL; }
+      //if (Find(t) != NULL){ Curr = NULL; }	//this creates the multiple twenties
+	  
       // walk through the tree until we reach its end
       while(Curr != NULL)
       {
-	//cout << "test3" << endl;
-	//if the item is less than the current item, move down the left leaf
-	if( t < Curr->Data() )
-	{
-	  if(Curr->m_ll == NULL)
-	  {
-	    Curr->m_ll = Ins;
-	    Ins->m_payload = t;
-	    break; 
-	  }
-	  else
-	  {
-	    Curr = Curr->m_ll;
-	  }
+		//cout << "test3" << endl;
+		//if the item is less than the current item, move down the left leaf
+		if( t < Curr->Data() )
+		{
+			if(Curr->m_ll == NULL)
+			{
+				Curr->m_ll = Ins;
+				Ins->m_payload = t;
+				break; 
+			}
+			else
+			{
+				Curr = Curr->m_ll;
+			}
 	    
-	}
-	//if the item is more than the current item, move down the right leaf
-	if( t > Curr->Data() )
-	{
-	  //check
-	  if( Curr->m_rl == NULL )
-	  {
-	    Curr->m_rl = Ins;
-	    //perform insert
-	    Ins->m_payload = t;
-	    break;
+		}
+		//if the item is more than the current item, move down the right leaf
+		if( t > Curr->Data() )
+		{
+			//check
+			if( Curr->m_rl == NULL )
+			{
+				Curr->m_rl = Ins;
+				//perform insert
+				Ins->m_payload = t;
+				break;
+			}
+			else
+			{
+				//move along
+				Curr = Curr->m_rl;
+			}
+		}
+		
+		//otherwise (if it is equal), no case for equal so exit the traversal
+		if( (t > Curr->Data()) == false && (t < Curr->Data()) == false )
+		{
+			break;
+		}
 	  }
-	  else
-	  {
-	    //move along
-	    Curr = Curr->m_rl;
-	  }
-	}
-	
-	//otherwise (if it is equal), no case for equal so exit the traversal
-	if( (t > Curr->Data()) == false && (t < Curr->Data()) == false )
-	{
-	  break;
-	}
-      }
     }
     
     /**********************************************
@@ -286,7 +287,6 @@ public:
 			if( t == Curr->Data() )
 			{
 				continue;
-	  
 			}
 	 
 		}

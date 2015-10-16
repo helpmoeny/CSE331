@@ -26,12 +26,13 @@ int main() {
    cout << "numbers read in:\n";
     copy(x.begin(), x.end(),
     ostream_iterator<int>(cout, " "));
-    cout << endl;
+    cout << endl;cout << endl;
 
     CTree<int> tree;
     srand (time(0));
     bool result = 1;
 
+	//cout<<"x.size(): "<<x.size()<<endl;
     for (int i=0; i<x.size(); i++){
         tree.Insert(x[i]);       // edit your insert code in Tree.h
     }
