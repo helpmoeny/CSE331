@@ -45,7 +45,9 @@ int main() {
 
     for (int i=0; i<x.size(); i++){
         if(i%2 == 0){
+			//cout<<"i: "<<i<<endl;
             tree.Delete(i);      // edit your deletion code in Tree.h
+			//tree.Preorder(cout);
         }
     }
 

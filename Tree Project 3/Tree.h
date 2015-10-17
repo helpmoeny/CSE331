@@ -1,3 +1,8 @@
+//
+// Name :         Tree.h
+// Description :  all implementation of binary search tree methods
+//
+
 using namespace std;
 #ifndef CTREE_H
 #define CTREE_H
@@ -20,20 +25,20 @@ public:
     public:
         friend class CTree;
 
-        Node() {m_ll = 0;  m_rl = 0;m_active = true;}
-        Node(const T &t) {m_payload = t;  m_ll = 0;  m_rl = 0;}
+        Node() {m_ll = 0;  m_rl = 0;}
+        Node(const T &t) {m_number = t;  m_ll = 0;  m_rl = 0;}
         ~Node() {delete m_ll;  delete m_rl;}
 
-        T &Data() {return m_payload;}
-        const T &Data() const {return m_payload;}
+        T &Data() {return m_number;}
+        const T &Data() const {return m_number;}
 
     private:
         Node    *m_ll;
         Node    *m_rl;
-        T       m_payload;
+        T       m_number;
 
-	bool m_active;
     };
+	
     /**********************************************
     * Name: Insert                                *
     * Purpose: Insert an item in the tree         *
@@ -45,59 +50,42 @@ public:
       //cout << "Insert" << endl;
       //declare new node to keep track of current node in traversal
       Node *Curr;
-      Node *Ins = new Node(t);
+      Node *node = new Node(t);
       Curr = m_root;
       
       //for when the root is not present yet
-      if( m_root == 0 )
-      {
-		m_root = Ins;
+      if( m_root == NULL ){
+		m_root = node;
       }
-      //if (Find(t) != NULL){ Curr = NULL; }	//this creates the multiple twenties
-	  
-      // walk through the tree until we reach its end
-      while(Curr != NULL)
-      {
-		//cout << "test3" << endl;
-		//if the item is less than the current item, move down the left leaf
-		if( t < Curr->Data() )
-		{
-			if(Curr->m_ll == NULL)
-			{
-				Curr->m_ll = Ins;
-				Ins->m_payload = t;
-				break; 
-			}
-			else
-			{
-				Curr = Curr->m_ll;
-			}
-	    
-		}
-		//if the item is more than the current item, move down the right leaf
-		if( t > Curr->Data() )
-		{
-			//check
-			if( Curr->m_rl == NULL )
-			{
-				Curr->m_rl = Ins;
-				//perform insert
-				Ins->m_payload = t;
-				break;
-			}
-			else
-			{
-				//move along
-				Curr = Curr->m_rl;
-			}
-		}
+		//if (Find(t) != NULL){ Curr = NULL; }	//this creates the multiple twenties
 		
-		//otherwise (if it is equal), no case for equal so exit the traversal
-		if( (t > Curr->Data()) == false && (t < Curr->Data()) == false )
-		{
-			break;
+		// walk through the tree until we reach its end
+		while(Curr != NULL){
+			//cout << "test3" << endl;
+			//if the item is less than the current item, move down the left leaf
+			if( t < Curr->Data() ){
+				if(Curr->m_ll == NULL){
+					Curr->m_ll = node;
+					break; 
+				}
+				else{	//There is a node there
+					Curr = Curr->m_ll;
+				}
+			}
+			//if the item is more than the current item, move down the right leaf
+			if( t > Curr->Data() ){
+				//check
+				if( Curr->m_rl == NULL ){
+					Curr->m_rl = node;
+					//perform insert
+					break;
+				}
+				else{	//There is a node there
+					//move along
+					Curr = Curr->m_rl;
+				}
+			}
 		}
-	  }
     }
     
     /**********************************************
@@ -110,58 +98,49 @@ public:
     {
       Node *Node = m_root;
       //cout << "Preorder" << endl;
-      recPre(Node, p_str);
+      PreNode(Node, p_str);
     }
     
-    void recPre(Node *Node, std::ostream &p_str)
+    void PreNode(Node *Node, std::ostream &p_str)
     { 
       //cout << "recPre1" << endl;
       //cout<< Node->Data() << endl;
-      p_str<< Node->Data()<< endl;
+      p_str<< Node->Data()<< " ";
       //cout << "recPre2" << endl;
-      if (Node->m_ll != NULL)
-      {
+      if (Node->m_ll != NULL){
 		//cout << "recPre3" << endl;
-		recPre(Node->m_ll, p_str);
+		PreNode(Node->m_ll, p_str);
       }
       //cout << "recPre4" << endl;
-      if (Node->m_rl != NULL)
-      {
+      if (Node->m_rl != NULL){
 		//cout << "recPre5" << endl;
-		recPre(Node->m_rl, p_str);
+		PreNode(Node->m_rl, p_str);
       }
     }
     
     int Depth() 
     {
       //cout << "Depth" << endl;
-      Node * Node = m_root;
+      Node *Node = m_root;
       int Dep = 0;
       int D;
       int currD = 0;
       
-      D = recDep(Node);
+      D = DepNode(Node);
       //cout << "D:" << D << endl;
       return D;
     }
     
-    int recDep( Node *Node )
+    int DepNode( Node *Node )
     {
-      if (Node == NULL)
-      {
+	  if (Node == NULL){
         return 0;
       }
-
-      int left = recDep(Node->m_ll);
-      int right = recDep(Node->m_rl); 
-
-      if (left > right)
-      {
-        return 1 + left;
+      if (DepNode(Node->m_ll) > DepNode(Node->m_rl)){
+        return 1 + DepNode(Node->m_ll);
       }
-      else
-      {
-        return 1 + right;
+      else{
+        return 1 + DepNode(Node->m_rl);
       }
     }
     
@@ -177,22 +156,18 @@ public:
       Node *Curr = new Node();
       Curr = m_root;
       // walk through the tree until we reach its end
-      while(Curr != NULL)
-      {
+      while(Curr != NULL){
+		//otherwise (if it is equal), yield the node found
+		if( t == Curr->Data()){
+			return Curr;
+		}
 		//if the item is less than the current item, move down the left leaf
-		if( t < Curr->m_payload )
-		{
+		if( t < Curr->m_number ){
 			Curr = Curr->m_ll;
 		}
 		//if the item is more than the current item, move down the right leaf
-		if( t > Curr->m_payload )
-		{
+		else if( t > Curr->m_number ){
 			Curr = Curr->m_rl;
-		}
-		//otherwise (if it is equal), yield the node found
-		if( t = Curr->Data())
-		{
-			return Curr;
 		}
       }
     }
@@ -211,34 +186,29 @@ public:
       Curr = m_root;
       //cout << "Find2-2" << endl;
       if(m_root != NULL){cout << Curr->Data() << endl;}
-      //walk through the tree until we reach its end
 	  
-      while(Curr!=NULL)
-      {
+      //walk through the tree until we reach its end
+      while(Curr!=NULL){
 		//if the item is less than the current item, move down the left leaf
-		if( t < Curr->Data() )
-		{
+		if( t < Curr->Data() ){
 			//check
 			if (Curr->m_ll != NULL){Curr = Curr->m_ll;}
 			else{break;}
 		}
 	
 		//if the item is more than the current item, move down the right leaf
-		else if( t > Curr->Data() )
-		{
+		else if( t > Curr->Data() ){
 			//check;
 			if(Curr->m_rl != NULL){Curr = Curr->m_rl;}
 			else{break;}
 		}
 		//otherwise (if it is equal), yield the node found
-		else//if(t == Curr->Data())
-		{
+		else{
 			//cout << "Find2-6" << endl;
 			return Curr;
 		}
-      }
-      return NULL;
-    
+	}
+    return nullptr;	//NULL?
     }
     
     /**********************************************
@@ -248,168 +218,111 @@ public:
     * Output: None, deletes the item              *
     **********************************************/
     void Delete(const T &t)
-    { 
-      if (Find(t) != NULL)
-      {
-		//cout << "Delete1" << endl;
-		Node *Curr = new Node();
-		//cout << "Delete2" << endl;
-		Curr = m_root;
-		//cout << "Delete3" << endl;
-		Node *Prev = new Node();
-		//cout << "Delete4" << endl;
-		// walk through the tree until we reach its end
-		//cout << "T:"<< t << endl;
-		while(Curr != NULL && t != Curr->Data())
-		{
-	
-			//cout << "Delete5" << endl;
-			//if the item is less than the current item, move down the left leaf
-			if( t < Curr->Data() )
-			{
-				//cout << "Delete6" << endl;
-				Prev = Curr;
-				//cout << "Delete7" << endl;
-				if (Curr->m_ll!=NULL){Curr = Curr->m_ll;}
-				else{break;}
-				//cout << "Delete8" << endl;
-			}
-			//if the item is more than the current item, move down the right leaf
-			if( t > Curr->Data() )
-			{
-				//cout << "Delete9" << endl;
-				Prev = Curr;
-				//cout << "Delete10" << endl;
-				if(Curr->m_rl!=NULL){Curr = Curr->m_rl;}
-				else{break;}
-				//cout << "Delete11" << endl;
-			}
-			if( t == Curr->Data() )
-			{
-				continue;
-			}
-	 
-		}
-		//cout << Curr->Data() << "will be deleted" << endl;  
-		if( Curr->m_ll == NULL && Curr->m_rl == NULL )
-		{
-			//check direction
-			if (Prev->m_ll == Curr)
-			{
-				//move pointers and delete
-				cout << Curr->Data() << endl;
-				delete Curr;
-				Prev->m_ll = NULL;
-			}
-		if (Prev->m_rl == Curr)
-		{
-			//move pointers and delete
-			cout << Curr->Data() << endl;
-			delete Curr;
-			Prev->m_rl = NULL;
-		}
-		}
-		if( Curr->m_ll != NULL && Curr->m_rl == NULL )
-		{
-			//check direction
-			if ( Prev->m_ll = Curr )
-			{
-				//move pointer
-				Prev->m_ll = Curr->m_ll;
-			}
-	  
-			if ( Prev->m_rl = Curr )
-			{
-				//move pointer
-				Prev->m_rl = Curr->m_ll;
-			}
-			delete Curr;
-		}
-		if( Curr->m_ll == NULL && Curr->m_rl != NULL )
-		{
-			//check direction
-			if ( Prev->m_rl == Curr )
-			{
-				//move pointer
-				Prev->m_rl = Curr->m_rl;
-			}
-			if (Prev->m_ll == Curr )
-			{
-				//move pointer
-				Prev->m_ll = Curr->m_rl;
-			}
-			delete Curr;
-		}
-		if ( Curr->m_ll != NULL && Curr->m_rl != NULL )
-		{
-			//check direction
-			if ( Prev->m_ll == Curr )
-			{
-				//move pointers
-				Prev->m_ll = Curr->m_rl;
-				(Curr->m_rl)->m_ll = Curr->m_ll;
-			}
-			if ( Prev->m_rl == Curr )
-			{
-				//move pointers
-				Prev->m_rl = Curr->m_ll;
-				(Curr->m_ll)->m_rl = Curr->m_rl;
-			}
-			//delete
-			delete Curr;
-		}
-      }
-    }
-      /*
-      if(Find(t)==NULL)
-      {
-	return;
-      }
-      else if (t<Node->Data())
-      {
-	Delete(Node->m_ll,t);
-      }
-      else if (t> Node->Data())
-      {
-	Delete(Node->m_rl, t);
-      }
-      else
-      {
-	if(Find(Node->m_ll)==NULL)
-	{
-	  Node=Node->m_rl;
-	}
-	else if(Find(Node->m_rl)==NULL)
-	{
-	  Node= Node->m_ll;
-	}
-	else
-	{
-	  y=recDel(Node->m_rl);
-	  Node->Data()=y;
-	}
-      }
-    }
-    int recDel(Node *Node)
     {
-      if (Find(Node)==NULL)
-      {
-	return NULL;
-      }
-      else if(Find(Node->m_ll)==NULL)
-      {
-	t=Node->Data();
-      }
-      else
-      {
-	t=recDel(Node->m_ll);
-      }
-      return (t);
+		Node *Prev = NULL;
+		Node *Curr = new Node();
+		Curr = m_root;
+        
+        while (Curr != NULL){
+            if (Curr->m_number == t){break;}
+            else{
+                if (t < Curr->m_number){
+                    Prev = Curr;
+                    Curr = Curr->m_ll; //Proceed left down tree
+                }
+                else if (t > Curr->m_number){
+                    Prev = Curr;
+                    Curr = Curr->m_rl; //Proceed right down tree
+                }
+            }
+            if (Curr == NULL){	//DON"T MOVE THIS GUY
+                return;
+            }
+        }
+        
+        //Remove Node with no children
+        if (Curr->m_ll == NULL && Curr->m_rl == NULL){
+            if (Prev != NULL){
+                if (Curr == Prev->m_ll){
+                    Prev->m_ll = NULL; //Remove pointer to Curr
+                    delete Curr;
+                }
+                else if (Curr == Prev->m_rl){
+                    Prev->m_rl = NULL; //Remove pointer to Curr
+                    delete Curr;
+                }
+            }
+            else{
+                m_root = NULL; //Root node no longer exists
+                delete Curr;
+            }
+        }
+        
+        //Delete Node with only left leaf
+        if (Curr->m_ll != NULL && Curr->m_rl == NULL){
+            if (Prev != NULL){
+                if (Curr == Prev->m_ll){
+                    Prev->m_ll = Curr->m_ll; //Replace pointer to Curr with its leaf
+                }
+                else if (Curr == Prev->m_rl){
+                    Prev->m_rl = Curr->m_ll; //Replace pointer to Curr with its leaf
+                }
+            }
+            else{
+                m_root = m_root->m_ll; //Set root node to left leaf
+            }
+        }
+        
+        //Delete Node with only right leaf
+        if (Curr->m_ll == NULL && Curr->m_rl != NULL){
+            if (Prev != NULL){
+                if (Curr == Prev->m_ll){
+                    Prev->m_ll = Curr->m_rl; //Replace pointer to Curr with its leaf
+                }
+                else if (Curr == Prev->m_rl){
+                    Prev->m_rl = Curr->m_rl; //Replace pointer to Curr with its leaf
+                }
+            }
+            else{
+                m_root = m_root->m_rl; //Set root node to right leaf
+            }
+        }
+        
+        //Delete Node with left and right leaf
+        if (Curr->m_ll != NULL && Curr->m_rl != NULL){
+            Prev = Curr; //Prev becomes the node to be deleted
+            Curr = Curr->m_rl; //Curr becomes its right leaf
+            if (Curr->m_ll == NULL && Curr->m_rl == NULL){
+                 Prev->m_number = Curr->m_number; //Move the data from Curr into Prev's position
+                 delete Curr; //Delete Curr
+                 Prev->m_rl = NULL; //Remove the pointer to Curr
+            }
+            else if (Curr->m_ll != NULL){
+                Node *ptr = Curr->m_ll; //Creates a pointer to the new left leaf of Curr
+                
+                while (ptr->m_ll != NULL){
+                    Curr = ptr;
+                    ptr = ptr->m_ll;
+                }
+                Prev->m_number = ptr->m_number; //Moves ptr's data to Prev's position
+                delete ptr; //Deletes ptr
+                Curr->m_ll = NULL; //Removes the pointer to ptr
+            }
+            else{
+                Node *ptr = Curr->m_rl; //Creates a pointer to the new right leaf of Curr
+                
+                while (ptr->m_rl != NULL){
+                    Curr = ptr;
+                    ptr = ptr->m_rl;
+                }
+                
+                Prev->m_number = ptr->m_number; //Moves ptr's data to Prev's position
+                delete ptr; //Deletes ptr
+                Curr->m_rl = NULL; //Removes the pointer to ptr
+            }
+        }
     }
-    */
-     
-
-
+    
 private:
     Node *m_root;
     Node *Prev;
