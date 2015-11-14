@@ -1,47 +1,69 @@
 /*
  Class Graph is a mockup class, thus you must not assume that this is a completed implementation. 
  Please add codes/comments to complete this class and where you think there is a need.
+	//make -f Makefile.mak
+	//g++ -std=c++11 -Wall -o graph.h main.cpp, maybe flip order of files?
+	//http://www.geeksforgeeks.org/bipartite-graph/
+	//https://github.com/danialgoodwin/dev/blob/master/algorithms-and-data-structures/graphs.md
 */
-#include <string>
-#include <list>
+#include <stdio.h>
+#include <string.h>	//string??
 #include <vector>
 #include <map>
-#include <queue>
-#include <deque>
 #include <iostream>
+#include <fstream>
+
 using namespace std;
 
+class Node{
+	private:
+		int number;
+		string color;
+		vector<int> EdgeArr;
+	public:
+		friend class Graph;
+		
+		Node(int n){	//constructor
+			number = n;
+			string color = "";
+		}
+		~Node(){	//destructor
+		}
+};
+		
 class Graph
 {
-private:
-	//vector<list<int> > adjList;
-    //list<int> *adj = new list<int>[adjList.size()];
-public:
-	//UnweightedGraph(const string& t);
-    //void DisplayInfo() const;
-	vector<int> connections;
-	deque<int,vector> graph;
+	private:
+		vector<Node> adjList;	//<Node<int>>?
+	public:
 	
-	Graph(char* filename) {
-		/* ifstream in(t);
-		if(!in.is_open()) {
-			cerr << "cannot open file!" << std::endl;
-			exit(EXIT_FAILURE);
-		}
-		string line;
-		while(getline(in,line)) {
-			istringstream iss(line);
-			int v;
-			list<int> list_temp;
-			while( iss >> v) {
-			list_temp.push_back(v);
+		Graph(char* filename) {
+			ifstream inf(filename);
+			if(!inf.is_open()) {
+				cerr << "cannot open file!" << std::endl;
+				exit(EXIT_FAILURE);
 			}
-			adjList.push_back(list_temp);
-		} */
-	}
+			int vertex=0;
+			while(true) {
+				if(!(inf>>vertex)){
+					//cout<<"Vertex: "<<vertex<<endl;	//print out vertex
+					break;
+				}
+				int v;
+				Node n= Node(vertex); 		//Create my object	//(n(vertex))?
+				while(inf.peek() !='\n'){
+					int i=0;
+					inf>>i;
+					//cout<<i<<",";	//print out the edges
+					n.EdgeArr.push_back(i);
+				}
+				//cout<<endl;
+				adjList.push_back(n);		//adjList.push_back(v);
+			}
+		}
 
-	~Graph() { 
-	} 
+		~Graph() { 
+		}
 
 	// function to determine whether a graph is bipartite
 	// start traverse a graph from node u
@@ -49,61 +71,56 @@ public:
 	bool isBipartitePrintTraversePath(int u);
 };
 
-//https://github.com/danialgoodwin/dev/blob/master/algorithms-and-data-structures/graphs.md
-//http://www.geeksforgeeks.org/bipartite-graph/
+
 // function to determine whether a graph is bipartite
 // start traverse a graph from node u
 // return true if a graph is bipartite. Otherwise, return false
 bool Graph::isBipartitePrintTraversePath(int u) {
 	// add you code here
 	
-	// Create a color array to store colors assigned to all veritces. Vertex 
-    // number is used as index in this array. The value '-1' of  colorArr[i] 
-    // is used to indicate that no color is assigned to vertex 'i'.  The value 
-    // 1 is used to indicate first color is assigned and value 0 indicates 
-    // second color is assigned.
-    int colorArr[graph.size];
-    for (int i = 0; i < graph.size(); ++i){
-		colorArr[i] = -1;
+	if(adjList.size() <=2){	//graph is bipartite
+		return true;
 	}
- 
-    // Assign first color to source
-    if(colorArr[u] % 2){	//x is odd
-		colorArr[u] = "BLACK";
+	
+	if(adjList[u].number%2 == 0){	//vertex is even, color it white
+		adjList[u].color="White";
+		cout<<u<<" White"<<endl;
 	}
-	else{	//x is even
-		colorArr[u] = "WHTIE";
+	else{		//vertex is odd, color it black
+		adjList[u].color="Black";
+		cout<<u<<" Black"<<endl;
 	}
- 
-    // Create a queue (FIFO) of vertex numbers and enqueue source vertex
-    // for BFS traversal
-    queue <int> q;
-    q.push(u);
- 
-    // Run while there are vertices in queue (Similar to BFS)
-    while (!q.empty())
-    {
-        // Dequeue a vertex from queue
-        int e = q.front();//access next element
-        q.pop();//remove next element
- 
-         // Find all non-colored adjacent vertices
-        for (int v = 0; v < V; ++v)
-        {
-            // An edge from e to v exists and destination v is not colored
-            if (G[e][v] && colorArr[v] == -1)
-            {
-                // Assign alternate color to this adjacent v of e
-                colorArr[v] = 1 - colorArr[e];
-                q.push(v);
-            }
- 
-            //  An edge from e to v exists and destination v is colored with
-            // same color as e
-            else if (G[e][v] && colorArr[v] == colorArr[e])
-                return false;
-        }
-    }
+	
+	for(int i=u; i<adjList.size(); i++){	//loops 13 times g1.txt because 13 lines/vertex_numbers
+		for(int v=0; v<adjList[i].EdgeArr.size(); v++){
+			//cout<<"edgeArr[v]: "<<adjList[i].EdgeArr[v]<<endl;
+			//cout<<adjList[adjList[i].EdgeArr[v]].number<<endl;
+			//cout<<"adjList[v].number: "<<adjList[v].number<<endl;	//same as v
+			//cout<<"v: "<<v<<endl;
+			
+			if(adjList[adjList[i].EdgeArr[v]].color==""){	//it has no color
+				if(adjList[i].color == "White"){
+					adjList[adjList[i].EdgeArr[v]].color="Black";
+					cout<<adjList[adjList[i].EdgeArr[v]].number<<" "<<"Black"<<endl;
+				}
+				else if(adjList[i].color == "Black"){
+					adjList[adjList[i].EdgeArr[v]].color="White";
+					cout<<adjList[adjList[i].EdgeArr[v]].number<<" "<<"White"<<endl;
+				}
+				else{
+					//cout<<"Error, adjList[adjList[i].EdgeArr[v]] is neither color?"<<endl;
+				}
+			}
+			else{
+				if(adjList[i].color == adjList[adjList[i].EdgeArr[v]].color){
+					//cout<<"i:"<<i<<" adjList[i]: "<<adjList[i].color<<" v:"<<v<<" adjList[v]: "<<adjList[v].color<<endl;
+					//cout<<"edgeArr: "<<adjList[i].EdgeArr[v]<<endl;	//the adjlist edgearr # that we are at
+					cout<<"CONFLICT "<<i<<" "<<adjList[i].EdgeArr[v]<<endl;
+					return false;
+				}
+			}
+		}
+	}
  
     // If we reach here, then all adjacent vertices can be colored with 
     // alternate color
