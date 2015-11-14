@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
     if (argc != 2) 
     {
-        cerr << "Incorrect nubmer of command line arguments." << endl;
+        cerr << "Incorrect number of command line arguments." << endl;
         cerr << "Usage: "<< argv[0] << " <an input file>" << endl;
         return EXIT_FAILURE;
     }

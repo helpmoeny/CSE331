@@ -92,6 +92,10 @@ bool Graph::isBipartitePrintTraversePath(int u) {
 	}
 	
 	for(int i=u; i<adjList.size(); i++){	//loops 13 times g1.txt because 13 lines/vertex_numbers
+		if(adjList[i].color==""){	//vertex has no color
+			i++;
+			continue;
+		}
 		for(int v=0; v<adjList[i].EdgeArr.size(); v++){
 			//cout<<"edgeArr[v]: "<<adjList[i].EdgeArr[v]<<endl;
 			//cout<<adjList[adjList[i].EdgeArr[v]].number<<endl;
@@ -121,6 +125,7 @@ bool Graph::isBipartitePrintTraversePath(int u) {
 			}
 		}
 	}
+
  
     // If we reach here, then all adjacent vertices can be colored with 
     // alternate color
