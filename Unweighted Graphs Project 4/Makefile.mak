@@ -1,10 +1,15 @@
-CPPFLAGS=-std=c++11 -g -O3
+CXX=g++ -g -std=c++11
+EXECUTABLE=prog
 
-prog: main.o 
-	g++ main.o -o prog
+SRC=$(wildcard *.h *.cpp)
+OBJ=$(SRC:%.h %.cpp=%.o)
 
-main.o: main.cpp graph.h 
-	g++ $(CPPFLAGS) -c main.cpp
+all: $(OBJ)
+	$(CXX) -o $(EXECUTABLE) $^
+
+%.o: %.c
+	$(CXX) -o $@ -c $<
 
 clean:
-	rm *.o -f
+	rm -f *.o
+	rm -f $(EXECUTABLE)

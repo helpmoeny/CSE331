@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
     if (argc != 2) 
     {
-        cerr << "Incorrect nubmer of command line arguments." << endl;
+        cerr << "Incorrect number of command line arguments." << endl;
         cerr << "Usage: "<< argv[0] << " <an input file>" << endl;
         return EXIT_FAILURE;
     }
@@ -29,7 +29,12 @@ int main(int argc, char* argv[])
     Graph graph(argv[1]);
     
     // determine whether an input graph is biparite
-    cout << graph.isBipartitePrintTraversePath(0) << endl;;
-
-    return EXIT_SUCCESS;
+    cout << graph.isBipartitePrintTraversePath(0) << endl;
+	if(graph.isBipartitePrintTraversePath(0)){
+		cout<< "True" <<endl;
+	}
+	else{	//(1)
+		cout<< "False" <<endl;
+	}
+	return true;
 }
