@@ -6,6 +6,12 @@
 #include "WeightedGraph.h"
 
 #include <iostream>
+#include <vector>
+#include <fstream>
+#include <set>
+#include <sstream>
+#include <limits>
+#include <unordered_map>
 #include <string>
 #include <list>
 
@@ -20,11 +26,13 @@ int main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 	
-	WeightedDigraph graph(argv[1]);	//segfault
-	
 	int source = atoi(argv[2]);
 	int dest = atoi(argv[3]);
-		
+	cout<<"source: "<<source<<" Dest: "<<dest<<endl;
+	
+	//cout<<argv[1]<<endl;	//print name of file
+	WeightedDigraph graph(argv[1], source, dest);
+	
 	/* if (graph.DoesPathExist(source, dest)) {		//do a check for instead, if returned path from graph.FindMinimumWeightedPath contains nothing...
 		cout << "Path from " << source << " to " << dest << ":" << endl;
 		

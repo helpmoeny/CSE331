@@ -7,6 +7,8 @@
 #include <sstream>
 #include <limits>
 #include <unordered_map>
+#include <string>
+#include <list>
 
 using namespace std;
 
@@ -14,23 +16,41 @@ using namespace std;
  * Constructs the digraph from a file.
  * You may add any additional construction to this section.
  */
-WeightedDigraph::WeightedDigraph(const string& filename) : numVertices(0), numArcs(0) {
+WeightedDigraph::WeightedDigraph(const string& filename, const int source, const int dest) : numVertices(0), numArcs(0) {
+	
+	//another way to loop through the file and do something
+	/* for(string line; getline(in,line);){
+		istringstream iss(line);
+		int a, b;
+		float weight;
+		iss >> a >> b >> weight;
+		cout<<"a: "<<a<<" "<<"b: "<<b<<" "<<"weight: "<<weight<<endl;
+		//cout<<line<<endl;	//print subsequent
+	} */
+	
+	string line;
+	//cout<<source<<" "<<dest<<endl;
 	ifstream in(filename);
 	if(!in.is_open()) {
 		cerr << "cannot open file!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	
-	string line;
-	getline(in, line);
-	istringstream vertexStream(line);
-	vertexStream >> numVertices;
+	while(getline(in,line)) {
+		istringstream iss(line);
+		int a, b;
+		float weight;
+		iss >> a >> b >> weight;
+		cout<<"a: "<<a<<" "<<"b: "<<b<<" "<<"weight: "<<weight<<endl;
+		//cout<<line<<endl;	//print subsequent
+		
+	}
 	
   // Data structures for constructing bool matrix
 
   // Iterate through length of list, insert "false" into vector of bools
   // that signal whether or not path is visited
-  for (auto itr = 0; itr != numVertices; itr++)
+  /* for (auto itr = 0; itr != numVertices; itr++)
   {
     boolVec.push_back(0);
   }
@@ -40,20 +60,12 @@ WeightedDigraph::WeightedDigraph(const string& filename) : numVertices(0), numAr
   {
     boolMatrix.push_back(boolVec);
   }
-
   // Iterate through length and insert "false" lists into matrix
   for (auto itr = 0; itr != numVertices; itr++)
   {
     pathMaps.push_back(emptyMap);
-  }
-
-  while(getline(in,line)) {
-    istringstream iss(line);
-    int u, v;
-    float weight;
-    iss >> u >> v >> weight;
-    InsertArc(u, v, weight);
-  }
+  } */
+  
 }
 
 /**

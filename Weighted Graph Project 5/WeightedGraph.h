@@ -10,7 +10,7 @@ using namespace std;
 
 class WeightedDigraph {
 public:
-	WeightedDigraph(const std::string& filename);
+	WeightedDigraph(const string& filename, const int source, const int dest);
 	~WeightedDigraph();
 	
 	WeightedDigraph(const WeightedDigraph&) = delete;
