@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	cout<<"source: "<<source<<" Dest: "<<dest<<endl;
 	
 	//cout<<argv[1]<<endl;	//print name of file
-	WeightedDigraph graph(argv[1], source, dest);
+	weightedgraph graph(argv[1], source, dest);
 	
 	/* if (graph.DoesPathExist(source, dest)) {		//do a check for instead, if returned path from graph.FindMinimumWeightedPath contains nothing...
 		cout << "Path from " << source << " to " << dest << ":" << endl;

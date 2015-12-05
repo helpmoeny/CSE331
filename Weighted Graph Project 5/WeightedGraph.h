@@ -1,41 +1,45 @@
 #ifndef Weightedgraph_H
 #define Weightedgraph_H
 
+#include <utility>
 #include<list>
 #include<vector>
 #include<string>
 #include <unordered_map>
+#include <map>
+#include <queue>
 
 using namespace std;
 
-class WeightedDigraph {
+class vertex{
+	private:
+		int number;
+		pair<int,float> arc;
+	public:
+		friend class weightedgraph;
+		
+		vertex(int n, pair<int,float> EdgeArr){	//constructor
+			number = n;
+			arc=EdgeArr;
+		}
+		~vertex(){	//destructor
+		}
+};
+
+class weightedgraph {
 public:
-	WeightedDigraph(const string& filename, const int source, const int dest);
-	~WeightedDigraph();
+	weightedgraph(const string& filename, const int source, const int dest);
+	~weightedgraph();
 	
-	WeightedDigraph(const WeightedDigraph&) = delete;
-	WeightedDigraph& operator=(const WeightedDigraph&) = delete;
+	weightedgraph(const weightedgraph&) = delete;
+	weightedgraph& operator=(const weightedgraph&) = delete;
 	
-	//int GetOrder() const { return numVertices; };//number of points with connections
-	//int GetSize() const { return numArcs; };//number of lines in file
-	
-	double GetPathWeight(const std::list<int> & path) const;
-	
-	bool DoesPathExist(int from, int to) const;
-	bool IsPathValid(const std::list<int> & path) const;
-	
-	std::list<int> FindMinimumWeightedPath(int from, int to) const;
+	list<int> FindMinimumWeightedPath(int from, int to) const;
 	
 private:
-	int numVertices;
-	int numArcs;
-
-	vector<std::unordered_map<int, double> > pathMaps;
-	unordered_map<int, double> emptyMap;
-	vector<std::vector<bool> > boolMatrix;
-	vector<bool> boolVec; 
-	
-	void InsertArc(int from, int to, double weight);
+	vector<pair<int,float>> list;
+	vector<float> weights;
+	//vector<vertex> graph;
 };
 
 
