@@ -59,7 +59,7 @@ weightedgraph::weightedgraph(const string& filename, const int source, const int
 		cout<<endl;
 	}
 	//cout<<"lines: "<<lines<<endl;
-	list<int> WeightedDigraph::FindMinimumWeightedPath(source, dest);
+	list<int> weightedgraph::FindMinimumWeightedPath(source, dest);
 }
 
 /**
