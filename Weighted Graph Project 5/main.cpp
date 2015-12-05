@@ -33,27 +33,7 @@ int main(int argc, char* argv[])
 	//cout<<argv[1]<<endl;	//print name of file
 	weightedgraph graph(argv[1], source, dest);
 	
-	/* if (graph.DoesPathExist(source, dest)) {		//do a check for instead, if returned path from graph.FindMinimumWeightedPath contains nothing...
-		cout << "Path from " << source << " to " << dest << ":" << endl;
-		
-		list<int> path = graph.FindMinimumWeightedPath(source, dest);
-		
-		if (!graph.IsPathValid(path)) {			//again maybe just do a check for path returning nothing/empty...
-			cerr << "NO PATH FOUND" << endl;
-			return 0;
-		}
-		
-		bool isStart = true;
-		for (int v : path) {
-			if (!isStart) cout << " -> ";
-			cout << v;
-			isStart = false;
-		}
-		cout << endl;
-	} 
-	else {
-		cout << "No path from " << source << " to " << dest << " exists!" << endl;		//"NO PATH FOUND"
-	} */
+	//list<int> path= graph.findpath(source,dest);
 
 	return 0;
 }

@@ -5,13 +5,12 @@
 #include<list>
 #include<vector>
 #include<string>
-#include <unordered_map>
 #include <map>
 #include <queue>
 
 using namespace std;
 
-class vertex{
+class vertex{	//not using currently
 	private:
 		int number;
 		pair<int,float> arc;
@@ -28,16 +27,16 @@ class vertex{
 
 class weightedgraph {
 public:
-	weightedgraph(const string& filename, const int source, const int dest);
+	weightedgraph(const string& file, const int source, const int dest);
 	~weightedgraph();
 	
 	weightedgraph(const weightedgraph&) = delete;
 	weightedgraph& operator=(const weightedgraph&) = delete;
 	
-	list<int> FindMinimumWeightedPath(int from, int to) const;
+	list<int> findpath(int from, int to) const;
 	
 private:
-	vector<pair<int,float>> list;
+	vector<pair<int,float>> graph;
 	vector<float> weights;
 	//vector<vertex> graph;
 };
