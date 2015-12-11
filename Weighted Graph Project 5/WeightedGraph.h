@@ -29,16 +29,12 @@ class weightedgraph {
 public:
 	weightedgraph(const string& file, const int source, const int dest);
 	~weightedgraph();
-	
-	weightedgraph(const weightedgraph&) = delete;
-	weightedgraph& operator=(const weightedgraph&) = delete;
-	
 	list<int> findpath(int from, int to) const;
 	
 private:
 	vector<pair<int,float>> graph;
 	vector<float> weights;
-	//vector<vertex> graph;
+
 };
 
 

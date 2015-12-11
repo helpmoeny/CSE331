@@ -48,13 +48,15 @@ weightedgraph::weightedgraph(const string& file, const int source, const int des
 		//cout<<line<<endl;	//print subsequent line
 		lines++;
 	}
+	//cout<<"lines: "<<lines<<endl;
 	
+	cout<<"File Print out:"<<endl;
 	for(int i=0; i<graph.size();i++){
 		cout<<"vertex: "<<graph[i].first<<" arc: "<<graph[i].second<<" weight: "<<weights[i];
 		cout<<endl;
 	}
-	//cout<<"lines: "<<lines<<endl;
-
+	cout<<endl;
+	
 }
 
 //Destructor
@@ -66,59 +68,28 @@ weightedgraph::~weightedgraph() {
  * Finds a path of minimum weight between source and dest
  * If there is no path it returns up empty
  */
-/* list<int> weightedgraph::findpath(int source, int dest) const {	//const??
-  vector<int> previous;
-  list<int> path;
-  vector<float> minDistance;
-  int vertices=7;
+list<int> weightedgraph::findpath(int source, int dest) const {	//const??
   
+  list<int> path;
+  //path.push_back(source);
   if (source == dest)
   {
     path.push_back(source);
     return path;
   }
-  
-  const float maxWeight = numeric_limits<float>::infinity();
-  minDistance.clear();
-  minDistance.resize(vertices, maxWeight);
-  minDistance[source] = 0;
-  previous.clear();
-  previous.resize(vertices, -1);
-
-  set<pair<int, float>> vertexQueue;
-  vertexQueue.insert(make_pair(source, minDistance[source]));
-
-  while (! vertexQueue.empty() )
-  {
-    auto distance = vertexQueue.begin()->second;
-    auto u = vertexQueue.begin()->first;
-    vertexQueue.erase(vertexQueue.begin());
-    auto neighbors = graph[u].second;
-    for ( auto i = neighbors.begin(); i != neighbors.end(); i++)
-    {
-      auto v = i->first;
-      auto weight = i->second;
-      auto distanceThroughU = distance + weight;
-      if (distanceThroughU < minDistance[v])
-      {
-        vertexQueue.erase(std::make_pair(v, minDistance[v]));
-        minDistance[v] = distanceThroughU;
-        previous[v] = u;
-        vertexQueue.insert(std::make_pair(v, minDistance[v]));
-      }
-    }
-  }
-  
-  auto vertex = dest;
-  path.push_front(dest);
-  bool foundPath = false;
-  while (! foundPath)
-  {
-    vertex = previous[vertex];
-    path.push_front(vertex);
-    if (vertex == source)
-      foundPath = true;
-  }
+  int element=0;
+  for(int j=0; j<graph.size();j++){
+		if(graph[j].first == source){
+			element=j;
+			break;
+		}
+		else{
+			path.clear();
+			break;
+		}
+	}
+  //need code to loop through my graph vector of pairs and traverse the least weighted options
+  //until destination is reached, then return the path and weight/cost
   
   return path;
-} */
+}
