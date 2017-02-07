@@ -1,7 +1,7 @@
 //
 // Name :         Tree.h
 // Description :  Simple binary search tree.
-// Created By :   Zachary Brenz
+// Created By : 
 //
 
 #ifndef CTREE_H
